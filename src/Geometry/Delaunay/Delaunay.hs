@@ -1,4 +1,14 @@
 module Geometry.Delaunay.Delaunay
+  ( delaunay
+  , vertexNeighborFacets
+  , sandwichedFacet
+  , facetOf
+  , facetFamilies
+  , facetCenters
+  , facetOf'
+  , facetFamilies'
+  , facetCenters'
+    ) 
   where
 import           Control.Monad         (unless, when)
 import           Data.IntMap.Strict    (IntMap)
@@ -14,11 +24,11 @@ import           Foreign.Marshal.Array (pokeArray)
 import           Foreign.Storable      (peek, sizeOf)
 import           Geometry.Qhull.Types
 
-delaunay :: [[Double]]   -- sites (vertices)
-         -> Bool         -- add a point at infinity
-         -> Bool         -- include degenerate tiles
-         -> Maybe Double -- volume threshold
-         -> IO Tesselation
+delaunay :: [[Double]]     -- ^ sites (vertex coordinates)
+         -> Bool           -- ^ whether to add a point at infinity
+         -> Bool           -- ^ whether to include degenerate tiles
+         -> Maybe Double   -- ^ volume threshold
+         -> IO Tesselation -- ^ Delaunay tessellation
 delaunay sites atinfinity degenerate vthreshold = do
   let n     = length sites
       dim   = length (head sites)
