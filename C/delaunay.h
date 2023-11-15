@@ -38,13 +38,13 @@ typedef struct Tile {
   int       orientation;
 } TileT;
 
-typedef struct Tesselation {
+typedef struct Tessellation {
   SiteT*    sites;
   TileT*    tiles;
   unsigned  ntiles;
   SubTileT* subtiles;
   unsigned  nsubtiles;
-} TesselationT;
+} TessellationT;
 
-TesselationT* tesselation(double*, unsigned, unsigned, unsigned, unsigned, double, unsigned*);
+TessellationT* tessellation(double*, unsigned, unsigned, unsigned, unsigned, double, unsigned*);
 void testdel2();

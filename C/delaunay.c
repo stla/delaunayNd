@@ -17,7 +17,7 @@ unsigned facetOK_(facetT* facet, unsigned degenerate){
 
 
 
-TesselationT* tesselation(
+TessellationT* tessellation(
 	double*   sites,
 	unsigned  dim,
 	unsigned  n,
@@ -42,7 +42,7 @@ TesselationT* tesselation(
   //fclose(tmpstdout);
   //printf("exitcode: %u\n", *exitcode);
 
-  TesselationT* out = malloc(sizeof(TesselationT)); /* output */
+  TessellationT* out = malloc(sizeof(TessellationT)); /* output */
 
 	if (!(*exitcode)) { /* 0 if no error from qhull */
 
@@ -545,7 +545,7 @@ void testdel2(){
   double sites[27] = {0,0,0, 0,0,1, 0,1,0, 0,1,1, 1,0,0, 1,0,1, 1,1,0, 1,1,1, 0.5,0.5,0.5};
   unsigned exitcode;
   unsigned dim = 3;
-  TesselationT* x = tesselation(sites, dim, 9, 0, 0, 0, &exitcode);
+  TessellationT* x = tessellation(sites, dim, 9, 0, 0, 0, &exitcode);
   printf("TESTDEL2 - nfacets:%u\n", x->ntiles);
   for(unsigned f=0; f < x->ntiles; f++){
     printf("facet %u - sites:\n", f);
