@@ -1,6 +1,6 @@
 cabal-version:       2.2
 name:                delaunayNd
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            Delaunay tessellation
 description:         
     This library performs the Delaunay tessellation in arbitrary dimension.
