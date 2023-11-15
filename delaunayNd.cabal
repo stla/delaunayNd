@@ -62,6 +62,7 @@ library
                      , C/mem_r.h
                      , C/merge_r.h
                      , C/poly_r.h
+                     , C/qhull_ra.h
                      , C/qset_r.h
                      , C/random_r.h
                      , C/user_r.h
