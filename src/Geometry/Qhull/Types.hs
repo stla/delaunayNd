@@ -1,4 +1,4 @@
-module Qhull.Types
+module Geometry.Qhull.Types
   where
 import           Data.Hashable
 import           Data.HashMap.Strict.InsOrd (InsOrdHashMap)

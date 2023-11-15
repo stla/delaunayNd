@@ -20,11 +20,11 @@ vertices = [
                            ]
 ```
 
-The `delaunay` function splits the polyhedron into simplices, the tiles of the
+The `delaunay` function splits the polyhedron into simplices, the *tiles* of the
 tesselation:
 
 ```haskell
-> import Delaunay
+> import Geometry.Delaunay
 > d <- delaunay vertices False False
 > _tiles d
 fromList
@@ -72,7 +72,7 @@ the tiles identifiers. A `Tile` object has five fields:
 A `Simplex` object has four fields:
 
 -   `_points`, the vertices of the simplex, actually a map of the vertices
-identifiers to their coordinates
+identifiers to their coordinates;
 
 -   `_circumcenter`, the coordinates of the circumcenter of the simplex;
 

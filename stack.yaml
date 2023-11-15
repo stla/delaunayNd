@@ -5,4 +5,6 @@ packages:
 
 # allow-newer: true
 
-# extra-deps:
+extra-deps:
+- Unique-0.4.7.9@sha256:7c37e22b7bb9df935c22112e67043177461aedcebe3a958854f6c0e9ecb54083,2155
+- ilist-0.4.0.1@sha256:126019faf3d02f305c5762ae9602be1cbf76291153a1a7461270ad1429678111,3305

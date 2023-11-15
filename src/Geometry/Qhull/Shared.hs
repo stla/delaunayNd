@@ -1,9 +1,9 @@
-module Qhull.Shared
+module Geometry.Qhull.Shared
   where
 import qualified Data.HashMap.Strict.InsOrd as H
 import qualified Data.IntMap.Strict         as IM
 import           Data.Maybe
-import           Qhull.Types
+import           Geometry.Qhull.Types
 
 -- | whether two families are the same
 sameFamily :: Family -> Family -> Bool
