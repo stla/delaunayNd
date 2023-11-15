@@ -161,7 +161,7 @@ Finally, the output of `delaunay` has the `_edges'` field, providing the
 edges: 
 
 ```haskell
- _edges' d
+> _edges' d
 fromList
   [ ( Pair 0 1 , ( [ -5.0 , -5.0 , 16.0 ] , [ -5.0 , 8.0 , 3.0 ] ) )
   , ( Pair 0 3 , ( [ -5.0 , -5.0 , 16.0 ] , [ 4.0 , -5.0 , 7.0 ] ) )

@@ -1,4 +1,17 @@
 module Geometry.Qhull.Shared
+  (
+    sameFamily
+  , verticesIds
+  , verticesCoordinates
+  , nVertices
+  , edgesIds
+  , edgesIds'
+  , edgesCoordinates
+  , nEdges
+  , isEdge
+  , toPoints
+  , toPoints'
+  )
   where
 import qualified Data.HashMap.Strict.InsOrd as H
 import qualified Data.IntMap.Strict         as IM

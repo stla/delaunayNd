@@ -28,7 +28,7 @@ delaunay :: [[Double]]     -- ^ sites (vertex coordinates)
          -> Bool           -- ^ whether to add a point at infinity
          -> Bool           -- ^ whether to include degenerate tiles
          -> Maybe Double   -- ^ volume threshold
-         -> IO Tesselation -- ^ Delaunay tessellation
+         -> IO Tessellation -- ^ Delaunay tessellation
 delaunay sites atinfinity degenerate vthreshold = do
   let n     = length sites
       dim   = length (head sites)
@@ -44,7 +44,7 @@ delaunay sites atinfinity degenerate vthreshold = do
   sitesPtr <- mallocBytes (n * dim * sizeOf (undefined :: CDouble))
   pokeArray sitesPtr (concatMap (map realToFrac) sites)
   exitcodePtr <- mallocBytes (sizeOf (undefined :: CUInt))
-  resultPtr <- c_tesselation sitesPtr
+  resultPtr <- c_tessellation sitesPtr
                (fromIntegral dim) (fromIntegral n)
                (fromIntegral $ fromEnum atinfinity)
                (fromIntegral $ fromEnum degenerate)
@@ -58,13 +58,13 @@ delaunay sites atinfinity degenerate vthreshold = do
       error $ "qhull returned an error (code " ++ show exitcode ++ ")"
     else do
       result <- peek resultPtr
-      out <- cTesselationToTesselation sites result
+      out <- cTessellationToTessellation sites result
       free resultPtr
       return out
 
 -- | tile facets a vertex belongs to, vertex given by its index;
 -- the output is the empty map if the index is not valid
-vertexNeighborFacets :: Tesselation -> Index -> IntMap TileFacet
+vertexNeighborFacets :: Tessellation -> Index -> IntMap TileFacet
 vertexNeighborFacets tess i = IM.restrictKeys (_tilefacets tess) ids
   where
     ids = maybe IS.empty _neighfacetsIds (IM.lookup i (_sites tess))
@@ -74,31 +74,31 @@ sandwichedFacet :: TileFacet -> Bool
 sandwichedFacet tilefacet = IS.size (_facetOf tilefacet) == 2
 
 -- | the tiles a facet belongs to
-facetOf :: Tesselation -> TileFacet -> IntMap Tile
+facetOf :: Tessellation -> TileFacet -> IntMap Tile
 facetOf tess tilefacet = IM.restrictKeys (_tiles tess) (_facetOf tilefacet)
 
 -- | the families of the tiles a facet belongs to
-facetFamilies :: Tesselation -> TileFacet -> IntMap Family
+facetFamilies :: Tessellation -> TileFacet -> IntMap Family
 facetFamilies tess tilefacet = IM.map _family (facetOf tess tilefacet)
 
 -- | the circumcenters of the tiles a facet belongs to
-facetCenters :: Tesselation -> TileFacet -> IntMap [Double]
+facetCenters :: Tessellation -> TileFacet -> IntMap [Double]
 facetCenters tess tilefacet =
   IM.map _center (facetOf tess tilefacet)
 
-funofFacetToFunofInt :: (Tesselation -> TileFacet -> IntMap a)
-                     -> (Tesselation -> Int -> IntMap a)
+funofFacetToFunofInt :: (Tessellation -> TileFacet -> IntMap a)
+                     -> (Tessellation -> Int -> IntMap a)
 funofFacetToFunofInt f tess i =
   maybe IM.empty (f tess) (IM.lookup i (_tilefacets tess))
 
 -- | the tiles a facet belongs to, facet given by its id
-facetOf' :: Tesselation -> Int -> IntMap Tile
+facetOf' :: Tessellation -> Int -> IntMap Tile
 facetOf' = funofFacetToFunofInt facetOf
 
 -- | the families of the tiles a facet belongs to, facet given by its id
-facetFamilies' :: Tesselation -> Int -> IntMap Family
+facetFamilies' :: Tessellation -> Int -> IntMap Family
 facetFamilies' = funofFacetToFunofInt facetFamilies
 
 -- | the circumcenters of the tiles a facet belongs to, facet given by its id
-facetCenters' :: Tesselation -> Int -> IntMap [Double]
+facetCenters' :: Tessellation -> Int -> IntMap [Double]
 facetCenters' = funofFacetToFunofInt facetCenters

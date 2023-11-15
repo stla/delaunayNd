@@ -1,8 +1,10 @@
 -- {-# LINE 1 "delaunay.hsc" #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 module Geometry.Delaunay.CDelaunay
-  ( cTesselationToTesselation
-  , c_tesselation )
+  ( 
+    cTessellationToTessellation
+  , c_tessellation 
+  )
   where
 import           Control.Monad              ((<$!>))
 import qualified Data.HashMap.Strict.InsOrd as H
@@ -95,7 +97,7 @@ cSiteToSite sites csite = do
   where
     filterAscList :: Int -> [Int] -> [Int]
     filterAscList n list =
-      let i = findIndex (>n) list in
+      let i = findIndex (> n) list in
       if isJust i
         then drop (fromJust i) list
         else []
@@ -144,11 +146,9 @@ cSimplexToSimplex sites simplexdim csimplex = do
       dim         = length (head sites)
   sitesids <- (<$!>) (map fromIntegral)
                      (peekArray simplexdim (__sitesids csimplex))
-  -- putStrLn "cSimplexToSimplex - peek sitesids"
   let points = fromAscList
                (zip sitesids (map ((!!) sites) sitesids))
   center <- (<$!>) (map cdbl2dbl) (peekArray dim (__center csimplex))
-  -- putStrLn "cSimplexToSimplex - peek center"
   return Simplex { _vertices'       = points
                  , _circumcenter = center
                  , _circumradius = radius
@@ -216,7 +216,6 @@ cSubTiletoTileFacet points csubtile = do
       offset     = realToFrac $ __offset csubtile
   simplex <- cSimplexToSimplex points dim subsimplex
   normal <- (<$!>) (map realToFrac) (peekArray dim (__normal csubtile))
-  -- putStrLn "cSubTiletoTileFacet - peek normal"
   return (id', TileFacet { _subsimplex = simplex
                          , _facetOf    = IS.fromAscList ridgeOf
                          , _normal'     = normal
@@ -292,14 +291,11 @@ cTileToTile points ctile = do
       family     = __family ctile
       orient     = __orientation ctile
       dim        = length (head points)
-  -- putStrLn $ "tile id: " ++ show id'
   simplex <- cSimplexToSimplex points (dim+1) csimplex
   neighbors <- (<$!>) (map fromIntegral)
                       (peekArray nneighbors (__neighbors ctile))
-  -- putStrLn "cTileToTile - peek neighbors"
   ridgesids <- (<$!>) (map fromIntegral)
                       (peekArray nridges (__ridgesids ctile))
-  -- putStrLn "cTileToTile - peek ridges"
   return (id', Tile {  _simplex      = simplex
                      , _neighborsIds = IS.fromAscList neighbors
                      , _facetsIds    = IS.fromAscList ridgesids
@@ -308,7 +304,7 @@ cTileToTile points ctile = do
                                         else Family (fromIntegral family)
                      , _toporiented  = orient == 1 })
 
-data CTesselation = CTesselation {
+data CTessellation = CTessellation {
     __sites     :: Ptr CSite
   , __tiles     :: Ptr CTile
   , __ntiles    :: CUInt
@@ -316,7 +312,7 @@ data CTesselation = CTesselation {
   , __nsubtiles :: CUInt
 }
 
-instance Storable CTesselation where
+instance Storable CTessellation where
     sizeOf    __ = (40)
 -- {-# LINE 246 "delaunay.hsc" #-}
     alignment __ = 8
@@ -332,14 +328,14 @@ instance Storable CTesselation where
 -- {-# LINE 252 "delaunay.hsc" #-}
       nsubtiles' <- (\hsc_ptr -> peekByteOff hsc_ptr 32) ptr
 -- {-# LINE 253 "delaunay.hsc" #-}
-      return CTesselation {
+      return CTessellation {
                      __sites     = sites'
                    , __tiles     = tiles'
                    , __ntiles    = ntiles'
                    , __subtiles  = subtiles'
                    , __nsubtiles = nsubtiles'
                   }
-    poke ptr (CTesselation r1 r2 r3 r4 r5)
+    poke ptr (CTessellation r1 r2 r3 r4 r5)
       = do
           (\hsc_ptr -> pokeByteOff hsc_ptr 0) ptr r1
 -- {-# LINE 263 "delaunay.hsc" #-}
@@ -352,7 +348,7 @@ instance Storable CTesselation where
           (\hsc_ptr -> pokeByteOff hsc_ptr 32) ptr r5
 -- {-# LINE 267 "delaunay.hsc" #-}
 
-foreign import ccall unsafe "tesselation" c_tesselation
+foreign import ccall unsafe "tessellation" c_tessellation
   :: Ptr CDouble -- sites
   -> CUInt       -- dim
   -> CUInt       -- nsites
@@ -360,28 +356,23 @@ foreign import ccall unsafe "tesselation" c_tesselation
   -> CUInt       -- 0/1, include degenerate
   -> CDouble     -- volume threshold
   -> Ptr CUInt   -- exitcode
-  -> IO (Ptr CTesselation)
+  -> IO (Ptr CTessellation)
 
-cTesselationToTesselation :: [[Double]] -> CTesselation -> IO Tesselation
-cTesselationToTesselation vertices ctess = do
+cTessellationToTessellation :: [[Double]] -> CTessellation -> IO Tessellation
+cTessellationToTessellation vertices ctess = do
   let ntiles    = fromIntegral $ __ntiles ctess
       nsubtiles = fromIntegral $ __nsubtiles ctess
       nsites    = length vertices
   sites''    <- peekArray nsites (__sites ctess)
-  -- putStrLn "peek sites"
   tiles''    <- peekArray ntiles (__tiles ctess)
-  -- putStrLn "peek tiles"
   subtiles'' <- peekArray nsubtiles (__subtiles ctess)
-  -- putStrLn "peek ridges"
   sites'     <- mapM (cSiteToSite vertices) sites''
   let sites = fromAscList (map (fst3 &&& snd3) sites')
       edgesIndices = concatMap thd3 sites'
       edges = map (toPair &&& both (_point . ((!) sites))) edgesIndices
   tiles'     <- mapM (cTileToTile vertices) tiles''
-  -- putStrLn "mapped cTileToTile"
   subtiles'  <- mapM (cSubTiletoTileFacet vertices) subtiles''
-  -- putStrLn "mapped cSubTiletoTileFacet"
-  return Tesselation
+  return Tessellation
          { _sites      = sites
          , _tiles      = fromAscList tiles'
          , _tilefacets = fromAscList subtiles'

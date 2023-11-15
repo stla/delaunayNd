@@ -1,4 +1,18 @@
 module Geometry.Qhull.Types
+  (
+    Index
+  , IndexMap
+  , IndexSet
+  , IndexPair (..)
+  , EdgeMap
+  , Family (..)
+  , HasCenter (..)
+  , HasEdges (..)
+  , HasFamily (..)
+  , HasNormal (..)
+  , HasVertices (..)
+  , HasVolume (..)
+  )
   where
 import           Data.Hashable
 import           Data.HashMap.Strict.InsOrd (InsOrdHashMap)

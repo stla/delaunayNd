@@ -1,4 +1,11 @@
 module Geometry.Delaunay.Types
+  (
+    Site (..)
+  , Simplex (..)
+  , TileFacet (..)
+  , Tile (..)
+  , Tessellation (..)
+  )
   where
 import           Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IM
@@ -68,18 +75,18 @@ instance HasVolume Tile where
 instance HasCenter Tile where
   _center = _circumcenter . _simplex
 
-data Tesselation = Tesselation {
+data Tessellation = Tessellation {
     _sites      :: IndexMap Site
   , _tiles      :: IntMap Tile
   , _tilefacets :: IntMap TileFacet
   , _edges'     :: EdgeMap
 } deriving Show
 
-instance HasEdges Tesselation where
+instance HasEdges Tessellation where
   _edges = _edges'
 
-instance HasVertices Tesselation where
+instance HasVertices Tessellation where
   _vertices tess = IM.map _point (_sites tess)
 
-instance HasVolume Tesselation where
+instance HasVolume Tessellation where
   _volume tess = sum (IM.elems $ IM.map (_volume' . _simplex) (_tiles tess))
