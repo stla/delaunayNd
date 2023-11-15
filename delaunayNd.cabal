@@ -21,7 +21,7 @@ extra-source-files:  README.md
 library
   hs-source-dirs:      src
   exposed-modules:     Geometry.Delaunay
-                     , Geometry.Delaunay.Delaunay
+  other-modules:       Geometry.Delaunay.Delaunay
                      , Geometry.Delaunay.CDelaunay
                      , Geometry.Delaunay.Types
                      , Geometry.Qhull.Types
