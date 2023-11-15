@@ -17,6 +17,7 @@ copyright:           2023 Stéphane Laurent
 category:            Math, Geometry
 build-type:          Simple
 extra-source-files:  README.md
+                     CHANGELOG.md
 
 library
   hs-source-dirs:      src
