@@ -1,13 +1,21 @@
 # delaunayNd
 
+<!-- badges: start -->
+[![Stack-lts](https://github.com/stla/delaunayNd/actions/workflows/Stack-lts.yml/badge.svg)](https://github.com/stla/delaunayNd/actions/workflows/Stack-lts.yml)
+[![Stack-lts-Mac](https://github.com/stla/delaunayNd/actions/workflows/Stack-lts-Mac.yml/badge.svg)](https://github.com/stla/delaunayNd/actions/workflows/Stack-lts-Mac.yml)
+[![Stack-nightly](https://github.com/stla/delaunayNd/actions/workflows/Stack-nightly.yml/badge.svg)](https://github.com/stla/delaunayNd/actions/workflows/Stack-nightly.yml)
+<!-- badges: end -->
+
+Delaunay tessellation in arbitrary dimension. 
 Based on the `qhull` C library.
 
-## Delaunay tesselation
+___
 
 Consider this list of vertices (actually these are the vertices of a
 polyhedron):
 
 ```haskell
+vertices :: [[Double]]
 vertices = [
             [ -5, -5,  16 ]  -- 0
           , [ -5,  8,   3 ]  -- 1
@@ -148,5 +156,3 @@ vertex belongs to;
 
 -   `_neightilesIds`, the set of the identifiers of the tiles the vertex belongs
 to.
-
-[![gfycat](https://thumbs.gfycat.com/FreeFaithfulArgali-size_restricted.gif)](https://gfycat.com/FreeFaithfulArgali)
