@@ -67,7 +67,7 @@ library
                      , C/stat_r.h
                      , C/delaunay.h
                      , C/utils.h
-  ghc-options:         -O0 -Wall
+  ghc-options:         -Wall
 
 source-repository head
   type:     git
