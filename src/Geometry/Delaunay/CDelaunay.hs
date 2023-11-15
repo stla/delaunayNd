@@ -6,17 +6,23 @@ module Geometry.Delaunay.CDelaunay
   , c_tessellation 
   )
   where
-import           Control.Monad              ((<$!>))
+import           Control.Monad              ( (<$!>) )
 import qualified Data.HashMap.Strict.InsOrd as H
-import           Data.IntMap.Strict         (fromAscList, (!))
+import           Data.IntMap.Strict         ( fromAscList, (!) )
 import qualified Data.IntSet                as IS
-import           Data.List
-import           Data.Maybe
-import           Data.Tuple.Extra           (both, fst3, snd3, thd3, (&&&))
-import           Geometry.Delaunay.Types
-import           Foreign
-import           Foreign.C.Types
-import           Geometry.Qhull.Types
+import           Data.List                  ( findIndex )
+import           Data.Maybe                 ( fromJust, isJust )
+import           Data.Tuple.Extra           ( both, fst3, snd3, thd3, (&&&) )
+import           Geometry.Delaunay.Types    ( Tessellation(..),
+                                              Tile(..),
+                                              TileFacet(..),
+                                              Simplex(..),
+                                              Site(..) )
+import           Foreign  ( Ptr,
+                            Storable(pokeByteOff, poke, peek, alignment, sizeOf, peekByteOff),
+                            peekArray )
+import           Foreign.C.Types            ( CInt, CDouble(..), CUInt(..) )
+import           Geometry.Qhull.Types       ( Family(Family, None), IndexPair(Pair) )
 
 data CSite = CSite {
     __id             :: CUInt

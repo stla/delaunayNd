@@ -14,10 +14,10 @@ module Geometry.Qhull.Types
   , HasVolume (..)
   )
   where
-import           Data.Hashable
-import           Data.HashMap.Strict.InsOrd (InsOrdHashMap)
-import           Data.IntMap.Strict         (IntMap)
-import           Data.IntSet                (IntSet)
+import           Data.Hashable              ( Hashable(hashWithSalt) )
+import           Data.HashMap.Strict.InsOrd ( InsOrdHashMap )
+import           Data.IntMap.Strict         ( IntMap )
+import           Data.IntSet                ( IntSet )
 
 type Index = Int
 type IndexMap = IntMap

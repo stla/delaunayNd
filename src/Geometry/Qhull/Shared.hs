@@ -15,8 +15,12 @@ module Geometry.Qhull.Shared
   where
 import qualified Data.HashMap.Strict.InsOrd as H
 import qualified Data.IntMap.Strict         as IM
-import           Data.Maybe
-import           Geometry.Qhull.Types
+import           Data.Maybe                 ( fromJust )
+import           Geometry.Qhull.Types       ( HasEdges(..),
+                                              HasVertices(..),
+                                              Family(Family),
+                                              IndexPair(..),
+                                              Index )
 
 -- | whether two families are the same
 sameFamily :: Family -> Family -> Bool

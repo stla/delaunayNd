@@ -7,10 +7,19 @@ module Geometry.Delaunay.Types
   , Tessellation (..)
   )
   where
-import           Data.IntMap.Strict (IntMap)
-import qualified Data.IntMap.Strict as IM
-import           Data.IntSet        (IntSet)
-import           Geometry.Qhull.Types
+import           Data.IntMap.Strict   ( IntMap )
+import qualified Data.IntMap.Strict    as IM
+import           Data.IntSet          ( IntSet )
+import           Geometry.Qhull.Types ( HasCenter(..),
+                                        HasVolume(..),
+                                        HasEdges(..),
+                                        HasVertices(..),
+                                        HasNormal(..),
+                                        HasFamily(..),
+                                        Family,
+                                        EdgeMap,
+                                        IndexSet,
+                                        IndexMap )
 
 data Site = Site {
     _point          :: [Double]

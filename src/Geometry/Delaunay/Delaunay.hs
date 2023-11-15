@@ -10,19 +10,27 @@ module Geometry.Delaunay.Delaunay
   , facetCenters'
     ) 
   where
-import           Control.Monad         (unless, when)
-import           Data.IntMap.Strict    (IntMap)
-import qualified Data.IntMap.Strict    as IM
-import qualified Data.IntSet           as IS
-import           Data.List.Unique      (allUnique)
-import           Data.Maybe
-import           Geometry.Delaunay.CDelaunay
-import           Geometry.Delaunay.Types
-import           Foreign.C.Types
-import           Foreign.Marshal.Alloc (free, mallocBytes)
-import           Foreign.Marshal.Array (pokeArray)
-import           Foreign.Storable      (peek, sizeOf)
-import           Geometry.Qhull.Types
+import           Control.Monad               ( unless, when )
+import           Data.IntMap.Strict          ( IntMap )
+import qualified Data.IntMap.Strict          as IM
+import qualified Data.IntSet                 as IS
+import           Data.List.Unique            ( allUnique )
+import           Data.Maybe                  ( fromMaybe )
+import           Geometry.Delaunay.CDelaunay ( c_tessellation
+                                             , cTessellationToTessellation 
+                                             )
+import           Geometry.Delaunay.Types     ( Tessellation(_tilefacets, _sites, _tiles),
+                                               Tile,
+                                               TileFacet(_facetOf),
+                                               Site(_neighfacetsIds) )
+import           Foreign.C.Types             ( CDouble, CUInt )
+import           Foreign.Marshal.Alloc       ( free, mallocBytes )
+import           Foreign.Marshal.Array       ( pokeArray )
+import           Foreign.Storable            ( peek, sizeOf )
+import           Geometry.Qhull.Types        ( HasCenter(_center), 
+                                               HasFamily(_family), 
+                                               Family, 
+                                               Index )
 
 delaunay :: [[Double]]     -- ^ sites (vertex coordinates)
          -> Bool           -- ^ whether to add a point at infinity
