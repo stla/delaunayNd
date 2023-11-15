@@ -40,7 +40,7 @@ TesselationT* tesselation(
   qh_zero(qh, errfile);
 	*exitcode = qh_new_qhull(qh, dim, n, sites, ismalloc, opts, outfile, errfile);
   //fclose(tmpstdout);
-  printf("exitcode: %u\n", *exitcode);
+  //printf("exitcode: %u\n", *exitcode);
 
   TesselationT* out = malloc(sizeof(TesselationT)); /* output */
 
@@ -530,7 +530,7 @@ TesselationT* tesselation(
 	qh_freeqhull(qh, !qh_ALL);                /* free long memory */
 	qh_memfreeshort(qh, &curlong, &totlong);  /* free short memory and memory allocator */
 
-  printf("RETURN\n");
+  //printf("RETURN\n");
   if(*exitcode){
     free(out);
     return 0;

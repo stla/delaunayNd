@@ -10,6 +10,7 @@ description:
     For examples, look at the README file.
 homepage:            https://github.com/stla/delaunayNd#readme
 license:             GPL-3.0-only
+license-file:        LICENSE
 author:              Stéphane Laurent
 maintainer:          laurent_step@outlook.fr
 copyright:           2023 Stéphane Laurent
