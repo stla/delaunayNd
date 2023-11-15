@@ -1,5 +1,7 @@
 import Geometry.Delaunay
+import Text.Show.Pretty
 
+vertices :: [[Double]]
 vertices = [
             [ -5, -5,  16 ]  -- 0
           , [ -5,  8,   3 ]  -- 1
@@ -10,4 +12,4 @@ vertices = [
           , [ -5,  8, -10 ]  -- 6
           , [ -5, -5, -10 ]  -- 7
                            ]
-d <- delaunay vertices False False
+-- d <- delaunay vertices False False Nothing
