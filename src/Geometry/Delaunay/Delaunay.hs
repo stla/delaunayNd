@@ -8,7 +8,7 @@ module Geometry.Delaunay.Delaunay
   , facetOf'
   , facetFamilies'
   , facetCenters'
-    ) 
+  ) 
   where
 import           Control.Monad               ( unless, when )
 import           Data.IntMap.Strict          ( IntMap )
@@ -19,23 +19,25 @@ import           Data.Maybe                  ( fromMaybe )
 import           Geometry.Delaunay.CDelaunay ( c_tessellation
                                              , cTessellationToTessellation 
                                              )
-import           Geometry.Delaunay.Types     ( Tessellation(_tilefacets, _sites, _tiles),
-                                               Tile,
-                                               TileFacet(_facetOf),
-                                               Site(_neighfacetsIds) )
+import           Geometry.Delaunay.Types     ( Tessellation(_tilefacets, _sites, _tiles)
+                                             , Tile
+                                             , TileFacet(_facetOf)
+                                             , Site(_neighfacetsIds) 
+                                             )
 import           Foreign.C.Types             ( CDouble, CUInt )
 import           Foreign.Marshal.Alloc       ( free, mallocBytes )
 import           Foreign.Marshal.Array       ( pokeArray )
 import           Foreign.Storable            ( peek, sizeOf )
-import           Geometry.Qhull.Types        ( HasCenter(_center), 
-                                               HasFamily(_family), 
-                                               Family, 
-                                               Index )
+import           Geometry.Qhull.Types        ( HasCenter(_center) 
+                                             , HasFamily(_family)
+                                             , Family
+                                             , Index 
+                                             )
 
-delaunay :: [[Double]]     -- ^ sites (vertex coordinates)
-         -> Bool           -- ^ whether to add a point at infinity
-         -> Bool           -- ^ whether to include degenerate tiles
-         -> Maybe Double   -- ^ volume threshold
+delaunay :: [[Double]]      -- ^ sites (vertex coordinates)
+         -> Bool            -- ^ whether to add a point at infinity
+         -> Bool            -- ^ whether to include degenerate tiles
+         -> Maybe Double    -- ^ volume threshold
          -> IO Tessellation -- ^ Delaunay tessellation
 delaunay sites atinfinity degenerate vthreshold = do
   let n     = length sites
@@ -110,3 +112,7 @@ facetFamilies' = funofFacetToFunofInt facetFamilies
 -- | the circumcenters of the tiles a facet belongs to, facet given by its id
 facetCenters' :: Tessellation -> Int -> IntMap [Double]
 facetCenters' = funofFacetToFunofInt facetCenters
+
+-- | list of the maps of vertices for all tiles
+getDelaunayTiles :: Tessellation -> [IntMap [Double]]
+getDelaunayTiles tess = IM.elems $ IM.map (_vertices . _simplex) (_tiles tess)
