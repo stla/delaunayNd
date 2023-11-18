@@ -8,6 +8,7 @@ module Geometry.Delaunay.Delaunay
   , facetOf'
   , facetFamilies'
   , facetCenters'
+  , getDelaunayTiles
   ) 
   where
 import           Control.Monad               ( unless, when )
@@ -20,7 +21,8 @@ import           Geometry.Delaunay.CDelaunay ( c_tessellation
                                              , cTessellationToTessellation 
                                              )
 import           Geometry.Delaunay.Types     ( Tessellation(_tilefacets, _sites, _tiles)
-                                             , Tile
+                                             , Tile (..)
+                                             , Simplex(_vertices')
                                              , TileFacet(_facetOf)
                                              , Site(_neighfacetsIds) 
                                              )
@@ -115,4 +117,4 @@ facetCenters' = funofFacetToFunofInt facetCenters
 
 -- | list of the maps of vertices for all tiles
 getDelaunayTiles :: Tessellation -> [IntMap [Double]]
-getDelaunayTiles tess = IM.elems $ IM.map (_vertices . _simplex) (_tiles tess)
+getDelaunayTiles tess = IM.elems $ IM.map (_vertices' . _simplex) (_tiles tess)
